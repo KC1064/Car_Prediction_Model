@@ -4,6 +4,7 @@ import pickle as pk
 import streamlit as st
 
 model = pk.load(open('model.pkl','rb'))
+dt_model = pk.load(open('DT_model.pkl','rb'))
 #  = pk.load(open('model.pk','rb'))
 
 st.header('Car Prediction Model')
@@ -17,7 +18,7 @@ cars_data['name'] = cars_data['name'].apply(get_brand_name)
 
 name = st.selectbox('Select Car Brand', cars_data['name'].unique())
 year = st.slider('Car Manufactured Year', 2000,2024)
-km_driven = st.slider('No of kms Driven', 11,200000)
+km_driven = st.slider('No of kms Driven', 1000,100000)
 fuel = st.selectbox('Fuel type', cars_data['fuel'].unique())
 seller_type = st.selectbox('Seller  type', cars_data['seller_type'].unique())
 transmission = st.selectbox('Transmission type', cars_data['transmission'].unique())
@@ -48,5 +49,7 @@ if st.button("Predict"):
                           ,inplace=True)
 
     car_price = model.predict(input_data_model)
+    car_price_dt = dt_model.predict(input_data_model)
 
-    st.markdown('Car Price is going to be '+ str(int(car_price[0])))
+    st.markdown('Car Price according to Linear Regression '+ str(int(car_price[0])))
+    st.markdown('Car Price according to Decision Tree Regression '+ str(int(car_price_dt[0])))
